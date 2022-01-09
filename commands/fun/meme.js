@@ -1,4 +1,5 @@
 let embedbuilder=require("../../util/embedBuilder.js")
+const fetch = require("node-fetch");
 module.exports = {
     name: 'meme',
     type: 'fun',
@@ -7,7 +8,7 @@ module.exports = {
     aliases: [],
     permissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
     async execute(message, args, bot, Discord, prefix) {
-        message.channel.sendTyping();
+       message.channel.sendTyping();
         const fetch = require("node-fetch");
         try {
             fetch(`http://meme-api.herokuapp.com/gimme`).then((res)=>{
@@ -27,12 +28,12 @@ module.exports = {
                   message.react("⭐");
                 });
                  }
-                 // nsfw in non nsfw
                  else{
                      const embed =  embedbuilder.createEmbedGenerator(message)
                     .setTitle("Sorry! Its NSFW")
                     .setImage("https://i.imgur.com/oe4iK5i.gif")
-                    .setFooter("Try again in an NSFW channel");     
+                    .setFooter("Try again in an NSFW channel");  
+                    message.channel.send({embeds: [embed.embed]})   
                  }
 
                  }

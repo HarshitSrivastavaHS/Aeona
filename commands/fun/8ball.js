@@ -17,7 +17,7 @@ module.exports = {
         question = question[0].toUpperCase()+question.substr(1, question.length);
         const embed = embed1.createEmbedGenerator(message)
         embed.setTitle(question)
-        embed.setImage("https://www.horoscope.com/images-US/games/game-magic-8-ball-no-text.png")
+        embed.setThumbnail("http://www.clipartbest.com/cliparts/aTq/x7p/aTqx7pLBc.png")
         embed.setDescription(`\`${replies[opt]}\``);
         message.channel.send({ content: "**:magic_wand: Magic 8 Ball :magic_wand:**", embeds: [embed.embed] });
     },
@@ -36,9 +36,9 @@ module.exports = {
       question = question[0].toUpperCase()+question.substr(1, question.length);
       let opt = Math.floor(Math.random()*replies.length);
       const embed = embed1.createEmbedGenerator(message)
-      embed.setTitle(question)
-      embed.setThumbnail("https://www.horoscope.com/images-US/games/game-magic-8-ball-no-text.png")
-      embed.setDescription(`\`${replies[opt]}\``);
+        .setTitle(question)
+        .setThumbnail("http://www.clipartbest.com/cliparts/aTq/x7p/aTqx7pLBc.png")
+        .setDescription(`\`${replies[opt]}\``);
       message.channel.send({ content: "**:magic_wand: Magic 8 Ball :magic_wand:**", embeds: [embed.embed] });
       let private = interaction.options.getBoolean("private")||false;
       interaction.reply({embeds: [embed.embed], ephemeral: private});

@@ -32,13 +32,21 @@ async function askQuestion(message, aki) {
                 .setCustomId("6")
                 .setLabel("🛑 Stop")
                 .setStyle("DANGER")
+
         let row = new Discord.MessageActionRow().addComponents(btn1, btn2, btn3, btn4, btn5);
+
         row2 = new Discord.MessageActionRow().addComponents(btn6, btn7);
+
         let emb = embedbuilder.createEmbedGenerator(message)
             .setTitle(`Question ${aki.currentStep + 1}`)
             .setDescription(`**Progress: ${Math.floor(aki.progress*10)/10}**\n**Q) ${aki.question}**`)
+
         let msg = await message.channel.send({embeds: [emb.embed], components: [row, row2]});
+
+        console.log(msg.id)
+
         const collector = new Discord.InteractionCollector(bot, {message: msg, type: "MESSAGE_COMPONENT", time: 60000});
+
         let answer = -1;
         collector.on("collect", (interaction)=>{
             if (interaction.user.id != message.author.id) return interaction.reply({content: "You cannot use these buttons.", ephemeral: true});
@@ -61,6 +69,7 @@ async function askQuestion(message, aki) {
                 bot.aki.splice(bot.aki.indexOf(message.author.id), 1);
                 return msg.edit({content: `**The game ended due to 1 minute of inactivity**`,embeds: [emb.embed],  components:[row, row2]});
             }
+
             let answers = [
                 "Yes",
                 "No",
@@ -70,8 +79,13 @@ async function askQuestion(message, aki) {
                 "Previous Question",
                 "Stop"
             ]
+
             emb.setDescription(`${emb.description}\nA) ${answers[answer]}`);
-            msg.edit({embeds: [emb.embed],  components:[row, row2]});
+
+            m = msg.edit({embeds: [emb.embed],  components: [row, row2]});
+
+            console.log(m.id)
+
             if (answer == 6) {
                 await aki.win();
                 bot.aki.splice(bot.aki.indexOf(message.author.id), 1);

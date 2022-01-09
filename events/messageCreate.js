@@ -88,7 +88,6 @@ module.exports = {
     let cmdexe = bot.commands.get(command)?bot.commands.get(command).command:undefined || bot.commands.find(c=>c.aliases&&c.aliases.includes(command))?bot.commands.find(c=>c.aliases&&c.aliases.includes(command)).command: undefined;
 
     if (message.author.bot&&!bot.allowedCommands.includes(cmdexe.name)) return;
-  
     if(cmdexe==undefined) return handleBotResponse(message,prefix);
 
     let botPerms = [];
