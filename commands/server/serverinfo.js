@@ -1,0 +1,32 @@
+let embedbuilder=require("../../util/embedBuilder.js")
+module.exports = {
+    name: 'serverinfo',
+    type: 'info',
+    usage: '&{prefix}serverinfo',
+    description: 'shows information about that server',
+    aliases: ["si"],
+    permissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
+    async execute(message, args, bot, Discord, prefix) {
+        await message.guild.members.fetch();
+        let veri = message.guild.verificationLevel;
+        let emb = embedbuilder.createEmbedGenerator(message)
+        .setTitle(`${message.guild.name}'s Server Information`)
+        .addField("General", `✹ Owner: ${await message.guild.fetchOwner()} (${await message.guild.fetchOwner().then(o=>o.user.tag)})\n\
+✹ Created on: ${message.guild.createdAt.toLocaleString("en-IN",{dateStyle: "long"})}\n\
+✹ Verified Server: ${message.guild.verified?"Yes":"No"}\n\
+✹ Verification Level: ${veri[0].toUpperCase()+veri.substr(1).toLowerCase().replace("_"," ")}`)
+        .addField("Categories & Channels", `✹ Categories: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_CATEGORY").size}\n\
+✹ Text Channels: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_TEXT").size}\n\
+✹ Thread Channels: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_PUBLIC_THREAD").size}\n\
+✹ Voice Channels: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_VOICE").size}\n\
+✹ Stage Channels: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_STAGE_VOICE").size}\n\
+✹ Announcement Channels: ${message.guild.channels.cache.filter(c=>c.type=="GUILD_NEWS").size}`)
+        .addField("Others", `✹ Total Members: ${message.guild.memberCount}\n\
+✹ Humans: ${message.guild.members.cache.filter(m=>!m.user.bot).size}\n\
+✹ Bots: ${message.guild.members.cache.filter(m=>m.user.bot).size}\n\
+✹ Custom Emojis: ${message.guild.emojis.cache.size}\n\
+✹ Roles: ${message.guild.roles.cache.size}`)
+        .setThumbnail(message.guild.icon?message.guild.iconURL():undefined)
+        message.channel.send({embeds:[emb]});
+    }
+}
