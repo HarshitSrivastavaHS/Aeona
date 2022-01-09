@@ -37,7 +37,7 @@ module.exports = {
       let opt = Math.floor(Math.random()*replies.length);
       const embed = embed1.createEmbedGenerator(message)
       embed.setTitle(question)
-      embed.setImage("https://www.horoscope.com/images-US/games/game-magic-8-ball-no-text.png")
+      embed.setThumbnail("https://www.horoscope.com/images-US/games/game-magic-8-ball-no-text.png")
       embed.setDescription(`\`${replies[opt]}\``);
       message.channel.send({ content: "**:magic_wand: Magic 8 Ball :magic_wand:**", embeds: [embed.embed] });
       let private = interaction.options.getBoolean("private")||false;
