@@ -16,7 +16,11 @@ module.exports = {
         //.setFooter(`Requested by ${message.author.username}`)
         if (cmd) {
            const command = cmd; 
-           helpembed.addFields({name:`Name`, value: `${command.name}`},{name:`Description`, value: `${command.description}`},{name:`Usage`, value: `${command.usage?command.usage.replace(PREFIX_REG, prefix):"not added"}`}, {name:`Aliases`, value: `${command.aliases.length>0?command.aliases.join(", "):"No Alias"}`}, {name:`Permissions Required by bot`, value: `${command.permissions?command.permissions.join(", ").toLowerCase().replace(/_/g," "):"not added"}`});
+           helpembed.addField(`Name`,  `${command.name}`); 
+           helpembed.addField(`Description`, `${command.description}`);  helpembed.addField(`Usage`,  `${command.usage?command.usage.replace(PREFIX_REG, prefix):"not added"}`)  
+           helpembed.addField(`Aliases`,  `${command.aliases.length>0?command.aliases.join(", "):"No Alias"}`);  
+           
+           helpembed.addField( `Permissions Required by bot`, `${command.permissions?command.permissions.join(", ").toLowerCase().replace(/_/g," "):"not added"}`);
         }
         else if (ctg) {
             let cat = fs.readdirSync(`./commands/${ctg}/`).filter(f=>f.endsWith(".js"));
@@ -44,7 +48,7 @@ module.exports = {
         else {
             helpembed.setDescription(`**Run \`${prefix}help <command>\` for further help on that command.**\n**Join the support server: https://discord.gg/hwa35nwYdr**`);
             let i = 0;
-            const emotes = ["rocket", "video_game", "tada", "robot", "compass", "person_curly_hair", "magnet", "tools"];
+            const emotes = ["girl","rocket", "video_game", "tada", "robot", "compass", "person_curly_hair", "magnet", "tools"];
             for (let category of categories) {
               if(category == 'devteam-only') continue;
                 let str = "";

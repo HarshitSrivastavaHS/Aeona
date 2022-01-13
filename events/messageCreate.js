@@ -2,20 +2,87 @@ const afkConfig = require('../Schemas/afk');
 const mongo = require(`../mongo`);
 const Discord = require("discord.js")
 const fetch = require("node-fetch");
+let embedbuilder=require("../util/embedBuilder.js")
+const user = require('../Schemas/user');
+var converter = require('number-to-words');
+const achivements=[50,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,20000,20000,30000,40000,50000,60000,70000,80000,900000,200000,300000,400000,500000,600000,700000,800000,900000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000,10000000,20000000,30000000,40000000,50000000,60000000,70000000,80000000,90000000,100000000,200000000,300000000,400000000,500000000,600000000,700000000,800000000,900000000,1000000000]
 async function handleBotResponse(message,prefix){
+  let bot = message.client;
+  serverprefix = bot.serverConfig.get(message.guild.id)!=undefined?bot.serverConfig.get(message.guild.id).prefix:undefined;
+    if (!serverprefix) serverprefix = "+";
+
+    var prefixes=[serverprefix,"+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
+
+  console.log("AI invoked");
+  var context1;
+  var context2;
+  if(message.reference){
+    botMessage=await message.fetchReference();
+    context1=botMessage.content;
+    var prefixFound=false;
+    var prefix;
+    for(pre in prefixes){
+      pre=prefixes[pre]
+      if(botMessage.content.toLowerCase().trim().startsWith(pre)){
+        prefixFound=true;
+        prefix=pre;
+        break;
+      }
+    }
+    context1=context1.slice(prefix.length)
+    if(botMessage.reference){
+      userMessage=await botMessage.fetchReference();
+      context2=userMessage.content;
+      var prefixFound=false;
+      var prefix;
+      for(pre in prefixes){
+        pre=prefixes[pre]
+        if(userMessage.content.toLowerCase().trim().startsWith(pre)){
+          prefixFound=true;
+          prefix=pre;
+          break;
+        }
+      }
+      context2=context2.slice(prefix.length)
+    }
+  }
+  
+  var url=`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`
+  if(context1){
+    url=url+"&context1="+context1;
+  }
+  if(context2){
+    url=url+"&context2="+context2;
+  }
+  console.log(url);
   var i=0;
-  while(i<3){
+  while(i<4){
     i++;
-  var replyFetch=await fetch(`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`);
+  var replyFetch=await fetch(url);
   var reply=await replyFetch.text()
-  console.log("Guild: "+message.guild.name+"\n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content+"\n Reply: "+reply)
-  if(reply=="") return;
-  if(!reply.toLowerCase().includes("html")){
-    await message.reply({content:reply,allowedMentions: {
+ 
+  if(reply=="") reply="I did prefer not to answer :P";
+  if(i=2){
+    message.content="RANDOM";
+  }
+  let embeds=[];
+  if (Math.floor(Math.random() * 50) < 5) {
+    try{
+          var embed= embedbuilder.createEmbedGenerator(message).setTitle("Help us grow by upvoting!").setDescription("[***Please upvote it helps a lot!***](https://top.gg/bot/870239976690970625)")
+          embeds.push(embed)
+    }catch(e){
+
+    }
+
+  }
+  if(!reply.toLowerCase().includes("html")&&!reply.toLowerCase().includes("!!!!!")){
+     console.log("Guild: "+message.guild.name+"\n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content+"\n Reply: "+reply)
+    await message.reply({content:reply,embeds:embeds,allowedMentions: {
           repliedUser: false
       }})
     return;
   }
+
   }
 }
 
@@ -24,12 +91,14 @@ module.exports = {
   async execute(message) {
     let bot = message.client;
     var prefix="";
-    
+    if(message.author.bot){
+      return;
+    }
 	  serverprefix = bot.serverConfig.get(message.guild.id)!=undefined?bot.serverConfig.get(message.guild.id).prefix:undefined;
     if (!serverprefix) serverprefix = "+";
 
     var prefixes=[serverprefix,"+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
-		if (message.author.bot&&!bot.allowedBots.includes(message.author.id)) return;
+
 
     if (bot.afk.has(message.author.id)) {
       message.reply("Welcome back! I have cleared your AFK");
@@ -75,7 +144,7 @@ module.exports = {
          prefixFound=true;
       }
     }
-    if (Math.floor(Math.random() * 100) ==3) {
+    if (Math.floor(Math.random() * 100) ==5) {
        prefixFound=true;
     }
     if(!prefixFound) return;
@@ -87,8 +156,40 @@ module.exports = {
     
     let cmdexe = bot.commands.get(command)?bot.commands.get(command).command:undefined || bot.commands.find(c=>c.aliases&&c.aliases.includes(command))?bot.commands.find(c=>c.aliases&&c.aliases.includes(command)).command: undefined;
 
-    if (message.author.bot&&!bot.allowedCommands.includes(cmdexe.name)) return;
-    if(cmdexe==undefined) return handleBotResponse(message,prefix);
+    if(cmdexe==undefined){ 
+      var words=message.content.split(" ");
+      await user.findOne({_id:message.author.id},function (err, userprofile) {
+        if (err) return handleError(err);
+        // Prints "Space Ghost is a talk show host".
+        if(userprofile){
+          var oldCount=userprofile.words;
+          words=words.length+Number(userprofile.words)
+          user.updateOne({ _id: message.author.id }, { words: ""+words }, function(err, res) {
+
+          });
+          var a=-1;
+          for(var i=0;i<achivements.length;i++){
+              if(achivements[i]>oldCount){
+                a=i;
+                i=1000;
+              }
+          }
+
+          if(words>achivements[a]){
+            var embed=embedbuilder.createEmbedGenerator(message);
+            embed=embed.setTitle(" YAY!");
+            embed=embed.setDescription(message.author.username+" has said "+converter.toWords(Number(words))+" words to Aeona!");
+            message.channel.send({ embeds: [embed.embed] });
+          }
+
+          }else{
+          user.create({ _id: message.author.id,words:""+words.length })
+          }
+          
+         
+      });
+      return handleBotResponse(message,prefix);
+    }
 
     let botPerms = [];
     let missingPerms = [];

@@ -16,7 +16,6 @@
     "aki-api": "^6.0.8",
     "canvacord": "^5.2.3",
     "canvas": "^2.8.0",
-    "clashofclans.js": "^1.5.4",
     "discord-api-types": "^0.24.0",
     "discord-canvas": "^1.4.1",
     "discord.js": "^13.4.0",
@@ -32,8 +31,10 @@
     "node-fetch": "^2.6.5",
     "node-superfetch": "^0.1.11",
     "nodemon": "^2.0.15",
+    "number-to-words": "^1.2.4",
     "random-puppy": "^1.1.0",
     "reconlx": "^1.4.511",
+    "tenorjs": "^1.0.8",
     "urlencode": "^1.1.0"
   },
   "devDependencies": {
