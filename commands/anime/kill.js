@@ -1,7 +1,7 @@
 let embedbuilder=require("../../util/embedBuilder.js")
 const Tenor = require("tenorjs").client({
     "Key": "YOUR DEVELOPER KEY HERE", // https://tenor.com/developer/keyregistration
-    "Filter": "off", // "off", "low", "medium", "high", not case sensitive
+    "Filter": "medium", // "off", "low", "medium", "high", not case sensitive
     "Locale": "en_US", // Your locale here, case-sensitivity depends on input
     "MediaFilter": "minimal", // either minimal or basic, not case sensitive
     "DateFormat": "D/MM/YYYY - H:mm:ss A" // Change this accordingly

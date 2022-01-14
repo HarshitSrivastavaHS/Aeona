@@ -34,6 +34,7 @@
     "number-to-words": "^1.2.4",
     "random-puppy": "^1.1.0",
     "reconlx": "^1.4.511",
+    "superagent": "^7.0.2",
     "tenorjs": "^1.0.8",
     "urlencode": "^1.1.0"
   },

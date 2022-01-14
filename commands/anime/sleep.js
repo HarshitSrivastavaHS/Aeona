@@ -8,7 +8,7 @@ const Tenor = require("tenorjs").client({
 });
 
 module.exports = {
-    name: ' sleep',
+    name: 'sleep',
     type: 'fun',
     usage: '&{prefix} sleep',
     description: ' sleep a user!',
@@ -20,7 +20,7 @@ module.exports = {
       let mentionUser = message.mentions.members.first()&&message.mentions.members.filter(m=>args[0]&&args[0].includes(m.user.id)).size>=1?message.mentions.members.filter(m=>args[0]&&args[0].includes(m.user.id)).first():false|| message.guild.members.cache.get(args[0])|| args.length > 0 ? message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(args.join(" ").toLowerCase())):false||message.member;
       mentionUser = await mentionUser.user.fetch(true);
 
-      Tenor.Search.Random("anime  sleep", "1").then(async function(Results){
+      Tenor.Search.Random("anime sleep", "1").then(async function(Results){
          var Post=Results[0];
          var embed=embedbuilder.createEmbedGenerator(message).setTitle(message.author.username +"  sleeps with "+mentionUser.username).setDescription('Good night!');
          var modChannel=bot.channels.cache.get("909834168609955862");

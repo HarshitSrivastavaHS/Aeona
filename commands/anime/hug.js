@@ -8,7 +8,7 @@ const Tenor = require("tenorjs").client({
 });
 
 module.exports = {
-    name: ' hug',
+    name: 'hug',
     type: 'fun',
     usage: '&{prefix} hug',
     description: ' hug a user!',
