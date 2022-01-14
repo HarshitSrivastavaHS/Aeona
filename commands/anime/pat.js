@@ -26,7 +26,7 @@ module.exports = {
                  var embed=embedbuilder.createEmbedGenerator(message).setTitle(message.author.username +" pats "+mentionUser.username).setDescription('Its a good day today!');
                  console.log(Post.media[0].gif.url)
                   const file = new Discord.MessageAttachment(Post.media[0].gif.url);
-                  embed=embed.setImage("attachment://tenor.gif");
+                  embed=embed.setImage(`attachment://${Post.media[0].gif.url}`);
                   message.channel.send({embeds:[embed],files: [file]})
             });
       }).catch(console.error);
