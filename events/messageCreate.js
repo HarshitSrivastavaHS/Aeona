@@ -14,46 +14,7 @@ async function handleBotResponse(message,prefix){
     var prefixes=[serverprefix,"+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
 
   console.log("AI invoked");
-  var context1;
-  var context2;
-  if(message.reference){
-    botMessage=await message.fetchReference();
-    context1=botMessage.content;
-    var prefixFound=false;
-    var prefix;
-    for(pre in prefixes){
-      pre=prefixes[pre]
-      if(botMessage.content.toLowerCase().trim().startsWith(pre)){
-        prefixFound=true;
-        prefix=pre;
-        break;
-      }
-    }
-    context1=context1.slice(prefix.length)
-    if(botMessage.reference){
-      userMessage=await botMessage.fetchReference();
-      context2=userMessage.content;
-      var prefixFound=false;
-      var prefix;
-      for(pre in prefixes){
-        pre=prefixes[pre]
-        if(userMessage.content.toLowerCase().trim().startsWith(pre)){
-          prefixFound=true;
-          prefix=pre;
-          break;
-        }
-      }
-      context2=context2.slice(prefix.length)
-    }
-  }
-  
   var url=`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`
-  if(context1){
-    url=url+"&context1="+context1;
-  }
-  if(context2){
-    url=url+"&context2="+context2;
-  }
   console.log(url);
   var i=0;
   while(i<4){

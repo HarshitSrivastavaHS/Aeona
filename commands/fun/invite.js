@@ -5,7 +5,7 @@ function getEm(bot,message){
   const em =   embedbuilder.createEmbedGenerator(message)
     .setTitle("Want to add me to your server? Use the link below!")
     .addFields({
-      name: "**Invite me**", value: "**[Click here to invite](https://discord.com/api/oauth2/authorize?client_id=919244474029334548&permissions=8&scope=bot%20applications.commands)**"
+      name: "**Invite me**", value: "**[Click here to invite](https://discord.com/api/oauth2/authorize?client_id=931226824753700934&permissions=8&scope=bot%20applications.commands)**"
     })
   return em;
 }
