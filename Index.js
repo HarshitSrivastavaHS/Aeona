@@ -20,7 +20,7 @@ const bot = new Discord.Client({ intents: new Discord.Intents([
     "DIRECT_MESSAGES",
     "DIRECT_MESSAGE_REACTIONS",
     "DIRECT_MESSAGE_TYPING"
-]), allowedMentions: { parse: ['users', 'roles'], repliedUser: true } });
+]), allowedMentions: { parse: ['users', 'roles'], repliedUser: true }, partials: ["CHANNEL"] });
 
 const mongo = require(`./mongo`);
 require("./util/dbload")(bot);

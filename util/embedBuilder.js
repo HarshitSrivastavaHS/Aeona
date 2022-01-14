@@ -11,12 +11,12 @@ class EmbedGenerator {
     this.embed = this.embed.setColor(color)
     this.embed = this.embed.setTimestamp()
 
-
-    this.embed = this.embed.setAuthor({ 
-      name: `${this.message.author.username}#${this.message.author.discriminator}`,
-      iconURL: this.message.member.displayAvatarURL({dynamic: true })
-    })
-
+    if(message.guild!=null){
+      this.embed = this.embed.setAuthor({ 
+        name: `${this.message.author.username}#${this.message.author.discriminator}`,
+        iconURL: this.message.member.displayAvatarURL({dynamic: true })
+      })
+    }
     this.setthisVariables()
   }
   

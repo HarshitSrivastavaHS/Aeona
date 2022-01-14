@@ -8,10 +8,8 @@ var converter = require('number-to-words');
 const achivements=[50,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,20000,20000,30000,40000,50000,60000,70000,80000,900000,200000,300000,400000,500000,600000,700000,800000,900000,1000000,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000,10000000,20000000,30000000,40000000,50000000,60000000,70000000,80000000,90000000,100000000,200000000,300000000,400000000,500000000,600000000,700000000,800000000,900000000,1000000000]
 async function handleBotResponse(message,prefix){
   let bot = message.client;
-  serverprefix = bot.serverConfig.get(message.guild.id)!=undefined?bot.serverConfig.get(message.guild.id).prefix:undefined;
-    if (!serverprefix) serverprefix = "+";
 
-    var prefixes=[serverprefix,"+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
+  var prefixes=["+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
 
   console.log("AI invoked");
   var url=`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`
@@ -37,10 +35,16 @@ async function handleBotResponse(message,prefix){
 
   }
   if(!reply.toLowerCase().includes("html")&&!reply.toLowerCase().includes("!!!!!")){
+    if(message.guild!=null){
      console.log("Guild: "+message.guild.name+"\n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content+"\n Reply: "+reply)
-    await message.reply({content:reply,embeds:embeds,allowedMentions: {
+     await message.reply({content:reply,embeds:embeds,allowedMentions: {
           repliedUser: false
       }})
+    }else{
+      console.log("DM: \n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content+"\n Reply: "+reply)
+      await message.reply({content:reply,embeds:embeds})
+    }
+
     return;
   }
 
@@ -55,10 +59,9 @@ module.exports = {
     if(message.author.bot){
       return;
     }
-	  serverprefix = bot.serverConfig.get(message.guild.id)!=undefined?bot.serverConfig.get(message.guild.id).prefix:undefined;
-    if (!serverprefix) serverprefix = "+";
 
-    var prefixes=[serverprefix,"+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
+
+    var prefixes=["+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
 
 
     if (bot.afk.has(message.author.id)) {
@@ -70,20 +73,20 @@ module.exports = {
         })
       })
     }
-
-    if (message.mentions.members.size>0) {
-      let mentions = message.mentions.members;
-      let arr = []
-      mentions.forEach((item, index)=>{
-        let mention = item;
-        let afkStatus = bot.afk.get(mention.user.id);
-        if (afkStatus)
-          arr.push(`${mention.user.username} is AFK. Message: ${afkStatus.msg} - <t:${afkStatus.time}:R>`);
-      })
+    if(message.guild!=null){
+      if (message.mentions.members.size>0) {
+        let mentions = message.mentions.members;
+        let arr = []
+        mentions.forEach((item, index)=>{
+          let mention = item;
+          let afkStatus = bot.afk.get(mention.user.id);
+          if (afkStatus)
+            arr.push(`${mention.user.username} is AFK. Message: ${afkStatus.msg} - <t:${afkStatus.time}:R>`);
+        })
       if (arr.length>0)
-        message.channel.send(arr.join("\n"));
+          message.channel.send(arr.join("\n"));
+      }
     }
-
     
     
     if (message.content.startsWith(`<@!${bot.user.id}>`)||message.content.startsWith(`<@${bot.user.id}>`)) {
@@ -99,15 +102,19 @@ module.exports = {
         break;
       }
     }
-    
-    if (message.mentions.repliedUser){
-      if(message.mentions.repliedUser.id==message.client.user.id){
-         prefixFound=true;
+    if(message.guild!=null){
+      if (message.mentions.repliedUser){
+        if(message.mentions.repliedUser.id==message.client.user.id){
+          prefixFound=true;
+        }
       }
+    }else{
+      prefixFound=true;
     }
     if (Math.floor(Math.random() * 100) ==5) {
        prefixFound=true;
     }
+    
     if(!prefixFound) return;
     if (!message.content.toLowerCase().startsWith(prefix)) return;
     
@@ -121,7 +128,6 @@ module.exports = {
       var words=message.content.split(" ");
       await user.findOne({_id:message.author.id},function (err, userprofile) {
         if (err) return handleError(err);
-        // Prints "Space Ghost is a talk show host".
         if(userprofile){
           var oldCount=userprofile.words;
           words=words.length+Number(userprofile.words)
@@ -151,21 +157,28 @@ module.exports = {
       });
       return handleBotResponse(message,prefix);
     }
-
-    let botPerms = [];
-    let missingPerms = [];
-    cmdexe.permissions.forEach(p=>{
-      botPerms.push(message.channel.permissionsFor(bot.user).has(p));
-      if (!(message.channel.permissionsFor(bot.user).has(p)))
-        missingPerms.push(p);
-    })
-    missingPerms = missingPerms.join("\n");
-    if (botPerms.includes(false)) return message.channel.send(`The Following permissions which are missing are needed by the bot for this command:\n\n\`\`\`\n${missingPerms.replace("_"," ")}\`\`\``).catch(err=>console.log(`Missing send message permission in a server.`));
+    if(message.guild!=null){
+      let botPerms = [];
+      let missingPerms = [];
+      cmdexe.permissions.forEach(p=>{
+        botPerms.push(message.channel.permissionsFor(bot.user).has(p));
+        if (!(message.channel.permissionsFor(bot.user).has(p)))
+          missingPerms.push(p);
+      })
+      missingPerms = missingPerms.join("\n");
+      if (botPerms.includes(false)) return;
+       message.channel.send(`The Following permissions which are missing are needed by the bot for this command:\n\n\`\`\`\n${missingPerms.replace("_"," ")}\`\`\``).catch(err=>console.log(`Missing send message permission in a server.`));
+    }
+   
     
 
     try {
       await cmdexe.execute(message, args, bot, Discord, prefix)
-      console.log("Guild: "+message.guild.name+"\n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content)
+      if(message.guild!=null){
+        console.log("Guild: "+message.guild.name+"\n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content)
+      }else{
+        console.log("DM \n"+" Channel: "+message.channel.name+"\n User: "+message.author.username+"\n Message: "+message.content)
+      }
     } catch (error) {
       console.error(error);
       await message.reply({ content: 'There was an error while executing this command! \n ***ERROR***:\n'+error});
