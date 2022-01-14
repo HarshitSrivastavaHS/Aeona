@@ -67,7 +67,11 @@ class EmbedGenerator {
     this.setthisVariables()
     return this.embed.toJSON();
   }
-
+  setVideo(url){
+    this.embed.setVideo(url);
+    this.setthisVariables();
+    return this;
+  }
   addField(fieldname, fieldvalue){
     this.setthisVariables()
     this.embed=this.embed.addField(fieldname,fieldvalue)

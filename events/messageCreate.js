@@ -23,7 +23,7 @@ async function handleBotResponse(message,prefix){
   var reply=await replyFetch.text()
  
   if(reply=="") reply="I did prefer not to answer :P";
-  if(i=2){
+  if(i==2){
     message.content="RANDOM";
   }
   let embeds=[];

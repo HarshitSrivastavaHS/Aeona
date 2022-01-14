@@ -8,10 +8,10 @@ const Tenor = require("tenorjs").client({
 });
 
 module.exports = {
-    name: 'hug',
+    name: ' hug',
     type: 'fun',
-    usage: '&{prefix}hug',
-    description: 'hug a user!',
+    usage: '&{prefix} hug',
+    description: ' hug a user!',
     aliases: [],
     permissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
     async execute(message, args, bot, Discord, prefix) {
@@ -20,15 +20,16 @@ module.exports = {
       let mentionUser = message.mentions.members.first()&&message.mentions.members.filter(m=>args[0]&&args[0].includes(m.user.id)).size>=1?message.mentions.members.filter(m=>args[0]&&args[0].includes(m.user.id)).first():false|| message.guild.members.cache.get(args[0])|| args.length > 0 ? message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(args.join(" ").toLowerCase())):false||message.member;
       mentionUser = await mentionUser.user.fetch(true);
 
-      Tenor.Search.Random("anime hug", "1").then(Results => {
-            Results.forEach(Post => {
-                  
-                 var embed=embedbuilder.createEmbedGenerator(message).setTitle(message.author.username +" hugs "+mentionUser.username).setDescription('Its a good day today!');
-                 console.log(Post.media[0].gif.url)
-                  const file = new Discord.MessageAttachment(Post.media[0].gif.url);
-                  embed=embed.setImage("attachment://tenor.gif");
-                  message.channel.send({embeds:[embed],files: [file]})
-            });
+      Tenor.Search.Random("anime hug", "1").then(async function(Results){
+         var Post=Results[0];
+         var embed=embedbuilder.createEmbedGenerator(message).setTitle(message.author.username +"  hugs "+mentionUser.username).setDescription('Dont squeeze to hard!');
+         var modChannel=bot.channels.cache.get("909834168609955862");
+         const file = new Discord.MessageAttachment(Post.media[0].gif.url);
+         var msg=await modChannel.send({files: [file]});
+         embed=embed.setImage(msg.attachments.first().proxyURL);
+         embed=embed.setThumbnail(msg.attachments.first().proxyURL);
+         embed.video={url:msg.attachments.first().proxyURL};
+        message.channel.send({embeds:[embed]})
       }).catch(console.error);
       
     }
