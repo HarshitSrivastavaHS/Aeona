@@ -112,7 +112,16 @@ module.exports = {
       prefixFound=true;
     }
     if (Math.floor(Math.random() * 100) ==5) {
-       prefixFound=true;
+       await user.findOne({_id:message.author.id},function (err, userprofile) {
+          if (err) return handleError(err);
+          if(userprofile){
+            if(userprofile.toggle==null||userprofile.toggle==undefined){
+              prefixFound=true;
+            }
+          }else{
+            prefixFound=true;
+          }
+        });
     }
     
     if(!prefixFound) return;
@@ -166,8 +175,7 @@ module.exports = {
           missingPerms.push(p);
       })
       missingPerms = missingPerms.join("\n");
-      if (botPerms.includes(false)) return;
-       message.channel.send(`The Following permissions which are missing are needed by the bot for this command:\n\n\`\`\`\n${missingPerms.replace("_"," ")}\`\`\``).catch(err=>console.log(`Missing send message permission in a server.`));
+      if (botPerms.includes(false)) return message.channel.send(`The Following permissions which are missing are needed by the bot for this command:\n\n\`\`\`\n${missingPerms.replace("_"," ")}\`\`\``).catch(err=>console.log(`Missing send message permission in a server.`));
     }
    
     

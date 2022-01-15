@@ -15,7 +15,8 @@ const opString = {
 
 const user = mongoose.Schema({
   _id: reqString,
-  words: reqString
+  words: reqString,
+  toggle:opString,
 })
 
 module.exports = mongoose.model("user", user)
