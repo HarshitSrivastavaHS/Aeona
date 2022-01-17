@@ -12,6 +12,7 @@ module.exports = {
             const embed =embedbuilder.createEmbedGenerator(message)
             .setImage(`https://inspirobot.me/api?generate=true`)
             .setTitle(`Heres a quote for you?`);
+            message.channel.send({embeds=[embed]});
         }
          catch(err){
                 message.channel.send("💔 Something went wrong");
