@@ -10,7 +10,7 @@ async function handleBotResponse(message,prefix){
   let bot = message.client;
 
   var prefixes=["+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
-
+  if(message.content.slice(prefix.length).trim()=="") return;
   console.log("AI invoked");
   var url=`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`
   console.log(url);
@@ -20,7 +20,7 @@ async function handleBotResponse(message,prefix){
   var replyFetch=await fetch(url);
   var reply=await replyFetch.text()
  
-  if(reply=="")  message.content="RANDOM";
+  if(reply==""){  message.content="RANDOM"; reply="html";}
   if(i==2){
     message.content="RANDOM";
   }
