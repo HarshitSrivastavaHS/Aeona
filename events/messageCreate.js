@@ -9,7 +9,7 @@ const achivements=[50,100,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000
 async function handleBotResponse(message,prefix){
   let bot = message.client;
 
-  var prefixes=["+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
+  var prefixes=["+","%",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
   if(message.content.slice(prefix.length).trim()=="") return;
   console.log("AI invoked");
   var url=`https://DumBotApi.deepsarda.repl.co?key=${process.env.apiKey}&text=${message.content.slice(prefix.length).trim()}&userid=${message.author.id}`
@@ -61,7 +61,7 @@ module.exports = {
     }
 
 
-    var prefixes=["+",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
+    var prefixes=["+","%",">","aeona",`<@!${bot.user.id}>`,`<@${bot.user.id}>`]
 
 
     if (bot.afk.has(message.author.id)) {
