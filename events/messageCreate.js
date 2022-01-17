@@ -20,7 +20,7 @@ async function handleBotResponse(message,prefix){
   var replyFetch=await fetch(url);
   var reply=await replyFetch.text()
  
-  if(reply=="") reply="I did prefer not to answer :P";
+  if(reply=="")  message.content="RANDOM";
   if(i==2){
     message.content="RANDOM";
   }
